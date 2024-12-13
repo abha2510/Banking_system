@@ -6,6 +6,17 @@ const { UserModel } = require("../Model/UserModel");
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET
 
+userRouter.get("/", async (req, res) => {
+    try {
+        let user = await UserModel.find();
+        res.send(user)
+    } catch (error) {
+        console.log(error.message);
+    }
+
+})
+
+
 userRouter.post('/register', async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
     if (!name || !email || !password || !confirmPassword) {
@@ -41,15 +52,15 @@ userRouter.post("/login", async (req, res) => {
     try {
         const user = await UserModel.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(400).send({ message: "Invalid email" });
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(400).send({ message: "Invalid password" });
         }
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, { expiresIn: '1h' });
 
-        return res.status(200).json({ message: "Login successful", token });
+        return res.status(200).send({ message: "Login successful", token });
     } catch (error) {
         res.send({ "msg": "Something went wrong", error: err.message })
     }

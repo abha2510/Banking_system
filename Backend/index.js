@@ -3,14 +3,23 @@ const cors= require('cors');
 require("dotenv").config();
 const {connection}= require("./db")
 const {userRouter}=require('./Routes/UserRoute')
+const {accountRouter} =require('./Routes/AccountRoute')
+
 const app = express();
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    allowedHeaders: 'Content-Type, Authorization, X-Requested-With'
+  };
+app.use(cors(corsOptions))
 
 app.get("/",(req,res)=>{
     res.send("Hello from Express Server");
 })
 app.use("/users",userRouter);
+app.use("/account",accountRouter);
 app.listen(process.env.PORT,async()=>{
     try {
         await connection
