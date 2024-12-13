@@ -3,6 +3,7 @@ import axios from 'axios';
 import "../Style/Login.css"
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [data, setData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
         password: ''
     })
       const [showPassword, setShowPassword] = useState(false);
+      const navigate=useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,8 +24,10 @@ const Login = () => {
             await axios.post('http://localhost:8083/users/login', data).then((res) => {
                 console.log(res);
                 if (res.status == 200) {
-                    toast.success(res.data.message);
                     localStorage.setItem("token", JSON.stringify(res.data.token))
+                    toast.success(res.data.message, {
+                        onClose: () => navigate('/account'), 
+                    });
                 }else{
                     toast.error(res.data.message);
                 }
