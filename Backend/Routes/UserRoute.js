@@ -36,12 +36,13 @@ userRouter.post('/register', async (req, res) => {
         }
         const hashPass = await bcrypt.hash(password, 7);
         const user = new UserModel({ name, email, password: hashPass });
+ 
         await user.save();
 
         return res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         res.send({ message: "Something went wrong: " + error.message, success: 1 });
-        console.log(err);
+        console.log(error);
     }
 })
 

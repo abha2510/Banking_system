@@ -45,5 +45,20 @@ accountRouter.post('/create',verifyToken, async (req, res) => {
     }
 });
 
+accountRouter.get('/accountDetailsByUser/:userId', verifyToken, async (req, res) => {
+    try {
+        let userId = req.params.userId; 
+        let specificUser = await AccountModel.find({ userId }); 
+    
+        if (!specificUser) {
+          return res.status(404).json({ message: "Account not found" });
+        }
+    
+        res.send(specificUser);
+      } catch (error) {
+        res.send({ message: "Server Error", error: error.message });
+      }
+
+});
 
 module.exports = { accountRouter }
