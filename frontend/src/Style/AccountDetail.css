@@ -1,0 +1,98 @@
+.table-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+
+.account-table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.account-table th, .account-table td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+    text-align: center;
+}
+
+.table-row:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.table-row:nth-child(even) {
+    background-color: #e9e9e9;
+}
+
+.table-row:hover {
+    background-color: #d1ffd6;
+    cursor: pointer;
+}
+
+.first-name, .last-name {
+    display: inline-block;
+    margin-right: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.icon {
+    margin-left: 8px;
+    font-size: 18px;
+    vertical-align: middle;
+}
+.deposit-icon {
+    color: green;
+}
+
+.withdraw-icon {
+    color: red;
+}
+.type{
+   position: relative;
+}
+.icon{
+    position: absolute;
+    right: 8px;
+    bottom: 5px;
+}
+.gradient-heading {
+    font-size: 3rem; 
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(90deg, #4CAF50, #2196F3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 20px 0;
+    font-family: 'Arial', sans-serif;
+}
+
+@media (max-width: 768px) {
+    .account-table {
+        width: 100%;
+    }
+
+    .account-table th, .account-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+}

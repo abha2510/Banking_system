@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({switchToRegister}) => {
     const [data, setData] = useState({
         email: '',
         password: ''
@@ -22,12 +22,13 @@ const Login = () => {
 
         try {
             await axios.post('http://localhost:8083/users/login', data).then((res) => {
-                console.log(res);
                 if (res.status == 200) {
                     localStorage.setItem("token", JSON.stringify(res.data.token))
+                    localStorage.setItem("userId", JSON.stringify(res.data.userId))
                     toast.success(res.data.message, {
                         onClose: () => navigate('/account'), 
                     });
+                    // switchToRegister(); 
                 }else{
                     toast.error(res.data.message);
                 }
@@ -50,11 +51,11 @@ const Login = () => {
            
         <form onSubmit={handleSubmit} className="login-form">
         <label className="input-label">
-            Email:
+            Email
             <input
                 type="email"
                 name="email"
-                placeholder="email"
+                placeholder="Enter Email"
                 value={data.email}
                 onChange={(e) => setData({ ...data, email: e.target.value })}
                 className="input-field"
@@ -80,6 +81,7 @@ const Login = () => {
                         </span>
                     </div>
                 </div>
+                <p>Don't have an account? <a href="#" onClick={switchToRegister}>Sign In</a></p>
         <button type="submit" className="submit-btn">Login</button>
     </form>
     <ToastContainer />

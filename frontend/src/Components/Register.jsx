@@ -1,57 +1,56 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
-import "../Style/Register.css"
+import "../Style/Register.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom'; 
-const Register = () => {
-    const [data,setData]=useState({
+
+const Register = ({ switchToLogin }) => {
+    const [data, setData] = useState({
         name: '',
         email: '',
         password: '',
-        confirmPassword: ''
-    })
+        confirmPassword: '',
+    });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const navigate=useNavigate()
 
-    const handleSubmit=(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (!data.name || !data.email || !data.password || !data.confirmPassword) {
-             toast.error("All fields are required");
+            toast.error("All fields are required");
             return;
         }
-    
+
         if (data.password.length < 6) {
-             toast.error("Password must be at least 6 characters long");
+            toast.error("Password must be at least 6 characters long");
             return;
         }
-    
+
         if (data.password !== data.confirmPassword) {
-             toast.error("Passwords do not match");
+            toast.error("Passwords do not match");
             return;
         }
+
         try {
-           axios.post('http://localhost:8083/users/register', data).then((res)=>{
-            if(res.status===200 || res.status===201){
-                console.log('User Registered Successfully');
+            const res = await axios.post('http://localhost:8083/users/register', data);
+            if (res.status === 200 || res.status === 201) {
                 toast.success("User Registered Successfully");
                 setData({
                     name: '',
                     email: '',
                     password: '',
-                    confirmPassword: ''
-                })
-                navigate('/login'); 
+                    confirmPassword: '',
+                });
+                switchToLogin(); 
             }
-           })
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.error("An error occurred during registration");
         }
-    
-    }
-  return  (
+    };
+
+    return (
         <div className="form-container">
             <form onSubmit={handleSubmit}>
                 <div className="input-group">
@@ -82,7 +81,7 @@ const Register = () => {
                     <label htmlFor="password">Password</label>
                     <div className="password-input">
                         <input
-                            type={showPassword ? "text" : "password"} 
+                            type={showPassword ? "text" : "password"}
                             id="password"
                             placeholder="Enter Password"
                             required
@@ -94,7 +93,7 @@ const Register = () => {
                             onClick={() => setShowPassword(!showPassword)}
                             style={{ cursor: 'pointer', marginLeft: '10px' }}
                         >
-                            {showPassword ? "👁️" : "🙈"} 
+                            {showPassword ? "👁️" : "🙈"}
                         </span>
                     </div>
                 </div>
@@ -103,7 +102,7 @@ const Register = () => {
                     <label htmlFor="confirmPassword">Confirm Password</label>
                     <div className="password-input">
                         <input
-                            type={showConfirmPassword ? "text" : "password"} 
+                            type={showConfirmPassword ? "text" : "password"}
                             id="confirmPassword"
                             placeholder="Confirm Password"
                             required
@@ -115,16 +114,17 @@ const Register = () => {
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             style={{ cursor: 'pointer', marginLeft: '10px' }}
                         >
-                            {showConfirmPassword ? "👁️" : "🙈"} 
+                            {showConfirmPassword ? "👁️" : "🙈"}
                         </span>
                     </div>
                 </div>
 
+                <p>Already have an account? <a href="#" onClick={switchToLogin}>Login</a></p>
                 <button type="submit">Submit</button>
             </form>
             <ToastContainer />
         </div>
     );
-}
+};
 
-export default Register
+export default Register;

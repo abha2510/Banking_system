@@ -96,7 +96,26 @@ const Account = () => {
 
                 if (response.status === 200 || response.status === 201) {
                     toast.success(response.data.message);
+                    setAccount({
+                        firstName: "",
+                        lastName: "",
+                        dob: "",
+                        gender: "",
+                        accountType: "",
+                        balance: 0,
+                        phone: "",
+                        pan: "",
+                        aadharNo: "",
+                        address: {
+                            street: "",
+                            city: "",
+                            state: "",
+                            zip: ""
+                        }
+                    })
                     console.log("Account Created:", response.data.account);
+                    localStorage.setItem("userId", JSON.stringify(response.data.account.userId ));
+                    localStorage.setItem("accountId", JSON.stringify(response.data.account._id ))
                 }
             } catch (error) {
                 console.error(error.response?.data?.message || error.message);
