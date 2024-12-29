@@ -3,7 +3,9 @@ const cors= require('cors');
 require("dotenv").config();
 const {connection}= require("./db")
 const {userRouter}=require('./Routes/UserRoute')
-const {accountRouter} =require('./Routes/AccountRoute')
+const {accountRouter} =require('./Routes/AccountRoute');
+const { transactionRouter } = require('./Routes/TransactionRoute');
+const { loanRouter } = require('./Routes/LoanRoute');
 
 const app = express();
 app.use(express.json());
@@ -20,6 +22,8 @@ app.get("/",(req,res)=>{
 })
 app.use("/users",userRouter);
 app.use("/account",accountRouter);
+app.use("/",transactionRouter)
+app.use("/",loanRouter)
 app.listen(process.env.PORT,async()=>{
     try {
         await connection

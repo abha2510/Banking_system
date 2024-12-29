@@ -60,8 +60,8 @@ userRouter.post("/login", async (req, res) => {
             return res.status(400).send({ message: "Invalid password" });
         }
         const token = jwt.sign({ id: user._id }, JWT_SECRET_KEY, { expiresIn: '1h' });
-
-        return res.status(200).send({ message: "Login successful", token });
+        let userId=user._id
+        return res.status(200).send({ message: "Login successful", token ,userId });
     } catch (error) {
         res.send({ "msg": "Something went wrong", error: err.message })
     }
