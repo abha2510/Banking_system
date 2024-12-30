@@ -7,8 +7,6 @@ import { MdArrowOutward } from "react-icons/md";
 const AccountDetail = () => {
     const [account, setAccount] = useState([]);
 
-
-
     const fetchAccountDetails = async () => {
         try {
             let userId = JSON.parse(localStorage.getItem("userId"));
@@ -19,7 +17,7 @@ const AccountDetail = () => {
                 },
             });
 
-            console.log(response.data);
+           
             setAccount(response.data);
         } catch (error) {
             console.error(error);

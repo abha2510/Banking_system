@@ -1,17 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
-    LineChart,
-    Line,
     XAxis,
     Tooltip,
     CartesianGrid,
-    ComposedChart,
     YAxis,
     Legend,
     Bar,
     ResponsiveContainer,
-    Area,
     BarChart,
     PieChart,
     Pie,
@@ -22,6 +18,8 @@ import "../Style/Dashboard.css";
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [chartData, setChartData] = useState([]);
+    const [lastSeen, setLastSeen] = useState(""); 
+    const [userDetails,setUserDetails] = useState([]);
 
     const fetchAccountDetails = async () => {
         try {
@@ -35,7 +33,7 @@ const Dashboard = () => {
                     },
                 }
             );
-
+            console.log(response.data);
             setTransactions(response.data);
 
             const transformedData = response.data.map((transaction) => ({
@@ -46,6 +44,40 @@ const Dashboard = () => {
             }));
 
             setChartData(transformedData);
+             const latestTransaction = response.data.reduce((latest, transaction) => {
+                return new Date(transaction.date) > new Date(latest.date)
+                    ? transaction
+                    : latest;
+            }, response.data[0]);
+
+            const lastSeenDate = new Date(latestTransaction.date);
+        
+            const formattedDate = lastSeenDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+            });
+    
+            const formattedTime = lastSeenDate.toLocaleTimeString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+            });
+
+            const lastSeen = `${formattedDate}, ${formattedTime}`;
+    
+            setLastSeen(lastSeen);
+            const res = await axios.get(
+                `http://localhost:8083/account/accountDetailsByUser/${userId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );  
+           
+            setUserDetails(res.data);
+       
         } catch (error) {
             console.error(error);
         }
@@ -74,10 +106,15 @@ const Dashboard = () => {
     };
 
     const pieChartData = getPieChartData();
-
+   console.log("userdetails",userDetails);
+   
     return (
         <div style={{ width: "100%", height: "400px" }}>
-            <h2>Dashboard</h2>
+            <h2 className="firstname">Hey {userDetails[0]?.firstName}, Welcome back to Online Banking</h2>
+            <p className="last-seen">Last seen: {lastSeen}</p> 
+            <div>
+                <p>Account Type: {userDetails[0]?.accountType}</p>
+            </div>
             <div className="main-container">
                 <div className="chart-container">
                     <ResponsiveContainer width="100%" height={500}>
@@ -100,10 +137,11 @@ const Dashboard = () => {
                             </Pie>
                             <Tooltip />
                             <Legend
-                                layout="horizontal"
-                                align="center"
-                                verticalAlign="bottom"
+                                layout="vertical"
+                                align="right"
+                                verticalAlign="middle"
                             />
+
                         </PieChart>
                     </ResponsiveContainer>
                 </div>
