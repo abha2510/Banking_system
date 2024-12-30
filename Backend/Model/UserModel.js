@@ -10,3 +10,10 @@ const userSchema = new mongoose.Schema({
 const UserModel = mongoose.model('user', userSchema);
 
 module.exports = { UserModel };
+
+// {
+//     "name": "Sheru",
+//     "email": "sheru@gmail.com",
+//     "password":"sheru123",
+//     "confirmPassword":"sheru123"
+//   }
