@@ -4,6 +4,8 @@ import { FaHome, FaBars } from "react-icons/fa";
 import { GrTransaction } from "react-icons/gr";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { IoSettings, IoLogOut } from "react-icons/io5";
+import { PiHandWithdrawBold } from "react-icons/pi";
+import { PiHandDepositBold } from "react-icons/pi";
 import "../Style/Sidebar.css";
 
 const Sidebar = () => {
@@ -37,6 +39,24 @@ const Sidebar = () => {
               onClick={() => setIsSidebarOpen(false)}
             >
               <GrTransaction /> <span className="side-text">Transaction</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/withdrawal"
+              className={({ isActive }) => (isActive ? "active-link" : undefined)}
+              onClick={() => setIsSidebarOpen(false)}
+            >
+             <PiHandWithdrawBold /> <span className="side-text">Withdrawal</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/deposit"
+              className={({ isActive }) => (isActive ? "active-link" : undefined)}
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <PiHandDepositBold /> <span className="side-text">Deposit</span>
             </NavLink>
           </li>
           <li>

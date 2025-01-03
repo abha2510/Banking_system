@@ -5,25 +5,24 @@ import AccountDetail from './Components/AccountDetail'
 import UserDetails from './Components/UserDetails'
 import Logout from './Components/Logout'
 import Dashboard from './Components/Dashboard'
-import Register from './Components/Register'
-import Login from './Components/Login'
+import ToggleForm from './Components/ToggleForm'
+import Withdrawal from './Components/Withdrawal'
+import Deposit from './Components/Deposit'
 
 const AllRoutes = () => {
 
   return (
     <div>
      <Routes>
-        {/* <Route path="/" element={<Home/>}></Route> */}
-        {/* <Route path="/register" element={<Register/>}></Route>
-        <Route path="/login" element={<Login/>}></Route> */}
-        <Route path="/register" element={<Register/>}></Route>
-        <Route path="/login" element={<Login/>}></Route> 
+        <Route path="/register" element={<ToggleForm/>}></Route>
+        <Route path="/login" element={<ToggleForm/>}></Route> 
         <Route path="/" element={<Dashboard/>}></Route>
         <Route path="/account" element={<Account/>}></Route>
         <Route path="/transaction" element={<AccountDetail/>}></Route> 
         <Route path="/usertDetails" element={<UserDetails/>}></Route> 
         <Route path="/logout" element={<Logout/>}></Route>
-      
+        <Route path="/withdrawal" element={<Withdrawal/>}></Route>
+        <Route path="/deposit" element={<Deposit/>}></Route>
      </Routes>
 
     </div>

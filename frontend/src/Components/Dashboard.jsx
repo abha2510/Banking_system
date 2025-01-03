@@ -14,12 +14,18 @@ import {
     Cell,
 } from "recharts";
 import "../Style/Dashboard.css";
+import { PaymentCard } from "react-payment-cards";
+import { FiArrowDownLeft } from "react-icons/fi";
+import { MdArrowOutward } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+
 
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [chartData, setChartData] = useState([]);
-    const [lastSeen, setLastSeen] = useState(""); 
-    const [userDetails,setUserDetails] = useState([]);
+    const [lastSeen, setLastSeen] = useState("");
+    const [userDetails, setUserDetails] = useState([]);
+    const navigate=useNavigate();
 
     const fetchAccountDetails = async () => {
         try {
@@ -44,20 +50,20 @@ const Dashboard = () => {
             }));
 
             setChartData(transformedData);
-             const latestTransaction = response.data.reduce((latest, transaction) => {
+            const latestTransaction = response.data.reduce((latest, transaction) => {
                 return new Date(transaction.date) > new Date(latest.date)
                     ? transaction
                     : latest;
             }, response.data[0]);
 
             const lastSeenDate = new Date(latestTransaction.date);
-        
+
             const formattedDate = lastSeenDate.toLocaleDateString('en-GB', {
                 day: '2-digit',
                 month: 'short',
                 year: 'numeric',
             });
-    
+
             const formattedTime = lastSeenDate.toLocaleTimeString('en-GB', {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -65,7 +71,7 @@ const Dashboard = () => {
             });
 
             const lastSeen = `${formattedDate}, ${formattedTime}`;
-    
+
             setLastSeen(lastSeen);
             const res = await axios.get(
                 `http://localhost:8083/account/accountDetailsByUser/${userId}`,
@@ -74,10 +80,10 @@ const Dashboard = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 }
-            );  
-           
+            );
+
             setUserDetails(res.data);
-       
+
         } catch (error) {
             console.error(error);
         }
@@ -106,14 +112,76 @@ const Dashboard = () => {
     };
 
     const pieChartData = getPieChartData();
-   console.log("userdetails",userDetails);
-   
+    console.log("userdetails", userDetails);
+
+
+    const cardDetails = {
+        cardHolderName: `${userDetails[0]?.firstName} ${userDetails[0]?.lastName}`,
+        cardValidity: userDetails[0]?.cardValidity,
+        cardSecurityCode: userDetails[0]?.cardSecurityCode,
+        cardNumber: userDetails[0]?.atmCardNumber,
+    };
+    //   const cardDetails = {
+    //     cardHolderName: `${userDetails[0]?.firstName} ${userDetails[0]?.lastName}`,
+    //     cardValidity: userDetails[0]?.cardValidity,
+    //     cardSecurityCode: userDetails[0]?.cardSecurityCode,
+    //     cardNumber: userDetails[0]?.atmCardNumber,
+    // };
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        const formattedDate = date.toLocaleDateString('en-US', options);
+        const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+        const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+
+        return `${formattedDate}, ${formattedTime}`;
+    }
+    const checkAllTransaction = () => {
+        navigate("/transaction")
+    }
     return (
         <div style={{ width: "100%", height: "400px" }}>
             <h2 className="firstname">Hey {userDetails[0]?.firstName}, Welcome back to Online Banking</h2>
-            <p className="last-seen">Last seen: {lastSeen}</p> 
+            <p className="last-seen">Last seen: {lastSeen}</p>
             <div>
+                <div className="all-transaction">
                 <p>Account Type: {userDetails[0]?.accountType}</p>
+                <button onClick={checkAllTransaction}>All Transaction</button>
+                </div>
+                <table className="transaction-table">
+                    <thead>
+                        <tr className="table-header">
+                            <th>Sr.No</th>
+                            <th>Account Number</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Balance</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {transactions.slice(-3).map((acc, index) => (
+                            <tr key={acc._id} className="table-row">
+                                <td>{index + 1}</td>
+                                <td>{acc.accountId}</td>
+                                <td>{acc.type}</td>
+                                <td className='type'>
+                                    <div>{acc.amount}</div>
+                                    <div className='icon'> {acc.type.toLowerCase() === "deposit" ? (
+                                        <FiArrowDownLeft className="icon deposit-icon" />
+                                    ) : (
+                                        <MdArrowOutward className="icon withdraw-icon" />
+                                    )}</div>
+                                </td>
+                                <td>
+                                    <div>{acc.balanceAfterTransaction}</div>
+
+                                </td>
+                                <td>{formatDate(acc.date)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
             <div className="main-container">
                 <div className="chart-container">
@@ -160,26 +228,15 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                 </div>
             </div>
+            {cardDetails.cardNumber && (
+                <PaymentCard
+                    cardDetails={cardDetails}
+                    flipped={false}
+                    cardBgColor="sea"
+                />
+            )}
         </div>
     );
 };
 
 export default Dashboard;
-
-{/* <ResponsiveContainer>
-                <ComposedChart data={chartData}>
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <CartesianGrid stroke="#f5f5f5" />
-                    <Area
-                        type="monotone"
-                        dataKey="balance"
-                        fill="#8884d8"
-                        stroke="#8884d8"
-                    />
-                    <Line type="monotone" dataKey="balance" stroke="#ff7300" />
-                    <Bar dataKey="amount" barSize={20} fill="#413ea0" />
-                </ComposedChart>
-            </ResponsiveContainer> */}

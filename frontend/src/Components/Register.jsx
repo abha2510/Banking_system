@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
 import axios from 'axios';
 import "../Style/Register.css";
 import { toast, ToastContainer } from 'react-toastify';
@@ -16,7 +17,6 @@ const Register = ({ switchToLogin }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!data.name || !data.email || !data.password || !data.confirmPassword) {
             toast.error("All fields are required");
             return;
@@ -36,13 +36,8 @@ const Register = ({ switchToLogin }) => {
             const res = await axios.post('http://localhost:8083/users/register', data);
             if (res.status === 200 || res.status === 201) {
                 toast.success("User Registered Successfully");
-                setData({
-                    name: '',
-                    email: '',
-                    password: '',
-                    confirmPassword: '',
-                });
-                switchToLogin(); 
+                setData({ name: '', email: '', password: '', confirmPassword: '' });
+                switchToLogin();
             }
         } catch (error) {
             console.error(error);
@@ -64,7 +59,6 @@ const Register = ({ switchToLogin }) => {
                         onChange={(e) => setData({ ...data, name: e.target.value })}
                     />
                 </div>
-
                 <div className="input-group">
                     <label htmlFor="email">Email</label>
                     <input
@@ -76,7 +70,6 @@ const Register = ({ switchToLogin }) => {
                         onChange={(e) => setData({ ...data, email: e.target.value })}
                     />
                 </div>
-
                 <div className="input-group">
                     <label htmlFor="password">Password</label>
                     <div className="password-input">
@@ -97,7 +90,6 @@ const Register = ({ switchToLogin }) => {
                         </span>
                     </div>
                 </div>
-
                 <div className="input-group">
                     <label htmlFor="confirmPassword">Confirm Password</label>
                     <div className="password-input">
@@ -118,13 +110,16 @@ const Register = ({ switchToLogin }) => {
                         </span>
                     </div>
                 </div>
-
                 <p>Already have an account? <a href="#" onClick={switchToLogin}>Login</a></p>
                 <button type="submit">Submit</button>
             </form>
             <ToastContainer />
         </div>
     );
+};
+
+Register.propTypes = {
+    switchToLogin: PropTypes.func.isRequired, 
 };
 
 export default Register;

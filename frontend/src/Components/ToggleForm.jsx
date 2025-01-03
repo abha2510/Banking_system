@@ -16,13 +16,13 @@ const ToggleForm = () => {
             <div className="toggle-switch">
                 <span
                     className={`toggle-option ${isLogin ? 'active' : ''}`}
-                    onClick={() => setIsLogin(true)}
+                    onClick={switchToLogin}
                 >
                     Login
                 </span>
                 <span
                     className={`toggle-option ${!isLogin ? 'active' : ''}`}
-                    onClick={() => setIsLogin(false)}
+                    onClick={switchToRegister}
                 >
                     Register
                 </span>
