@@ -20,6 +20,29 @@ const accountSchema=new mongoose.Schema({
           return Math.floor(10000000000 + Math.random() * 90000000000).toString(); 
         }
       },
+      atmCardNumber: {
+        type: String,
+        unique: true,
+        required: true,
+        default: function () {
+          return Math.floor(10 ** 15 + Math.random() * 9 * 10 ** 15).toString(); 
+        }
+    },
+    cardValidity: {
+      type: String,
+      default: function () {
+          const now = new Date();
+          const month = String(now.getMonth() + 1).padStart(2, '0'); 
+          const year = String(now.getFullYear() + 5).slice(-2); 
+          return `${month}/${year}`;
+      }
+  },
+  cardSecurityCode: {
+      type: String,
+      default: function () {
+          return Math.floor(100 + Math.random() * 900).toString(); 
+      }
+  },
     phone: String,
     pan:String,
     aadharNo:String,

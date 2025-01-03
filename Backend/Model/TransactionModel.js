@@ -7,7 +7,6 @@ const transactionSchema = new mongoose.Schema({
    amount:{type:Number,required: true,min:0},
    description:String,
    status:{type:String,enum:['Pending','Completed','Failed'],default:'Completed'},
-   amount:{type:Number,required:true},
    date:{type:Date,default:Date.now},
    description:{type:String},
    balanceAfterTransaction:{type:Number,required:true}
@@ -16,3 +15,10 @@ const transactionSchema = new mongoose.Schema({
 const TransactionModel = mongoose.model('transaction', transactionSchema);
 
 module.exports = { TransactionModel };
+
+
+// {
+//   "userId":"6777fad4c49a981909007079",
+//   "accountId":"6777fc8e2ee41d548770e9d8",
+//   "amount":700
+//  }
