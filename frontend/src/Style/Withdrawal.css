@@ -1,0 +1,117 @@
+.withdrawal-div {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .deposit-div{
+    text-align: center;
+    margin-top: 50px;
+  }
+  .buttons-div {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    margin: auto;
+  }
+  .buttons-div div {
+    text-align: center;
+    width: 45%; 
+    display: flex;
+    flex-direction: column;  
+    align-items: center;
+  }
+  .buttons-div button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px; 
+  }
+  
+  .buttons-div button:hover {
+    background-color: #45a049;
+  }
+  
+  .buttons-div img {
+    width: 200px; 
+    height: 200px; 
+    object-fit: contain; 
+    margin-top: 10px;
+    border: 2px solid #ccc; 
+    border-radius: 5px;
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  .modal-content form label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .modal-content form input {
+    width: 92%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .cancel-button,
+  .continue-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .cancel-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .continue-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .continue-button:hover {
+    background-color: #45a049;
+  }
+  

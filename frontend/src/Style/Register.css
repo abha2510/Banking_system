@@ -33,7 +33,7 @@
     border-color: #0066cc;
     box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
 }
-button {
+.submit-button {
     width: 100%;
     padding: 12px;
     background-color: #0066cc;
@@ -46,7 +46,7 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.submit-button:hover {
     background-color: #005bb5;
 }
 .password-input {
@@ -63,7 +63,7 @@ button:hover {
         font-size: 14px;
     }
 
-    button {
+    .submit-button {
         font-size: 14px;
     }
 }

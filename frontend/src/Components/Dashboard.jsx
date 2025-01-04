@@ -18,6 +18,7 @@ import { PaymentCard } from "react-payment-cards";
 import { FiArrowDownLeft } from "react-icons/fi";
 import { MdArrowOutward } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import noDataFoundGif from "../assets/noDataFound.gif";
 
 
 const Dashboard = () => {
@@ -25,7 +26,7 @@ const Dashboard = () => {
     const [chartData, setChartData] = useState([]);
     const [lastSeen, setLastSeen] = useState("");
     const [userDetails, setUserDetails] = useState([]);
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const fetchAccountDetails = async () => {
         try {
@@ -83,6 +84,7 @@ const Dashboard = () => {
             );
 
             setUserDetails(res.data);
+            localStorage.setItem("accountId", JSON.stringify(res.data[0]?._id));
 
         } catch (error) {
             console.error(error);
@@ -139,94 +141,107 @@ const Dashboard = () => {
     const checkAllTransaction = () => {
         navigate("/transaction")
     }
+ 
     return (
         <div style={{ width: "100%", height: "400px" }}>
-            <h2 className="firstname">Hey {userDetails[0]?.firstName}, Welcome back to Online Banking</h2>
-            <p className="last-seen">Last seen: {lastSeen}</p>
+            {userDetails.length > 0 && (
+                <>
+                    <h2 className="firstname">Hey {userDetails[0]?.firstName}, Welcome back to Online Banking</h2>
+                    <p className="last-seen">Last seen: {lastSeen || "N/A"}</p>
+                </>
+            )}
+
             <div>
-                <div className="all-transaction">
-                <p>Account Type: {userDetails[0]?.accountType}</p>
-                <button onClick={checkAllTransaction}>All Transaction</button>
-                </div>
-                <table className="transaction-table">
-                    <thead>
-                        <tr className="table-header">
-                            <th>Sr.No</th>
-                            <th>Account Number</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Balance</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {transactions.slice(-3).map((acc, index) => (
-                            <tr key={acc._id} className="table-row">
-                                <td>{index + 1}</td>
-                                <td>{acc.accountId}</td>
-                                <td>{acc.type}</td>
-                                <td className='type'>
-                                    <div>{acc.amount}</div>
-                                    <div className='icon'> {acc.type.toLowerCase() === "deposit" ? (
-                                        <FiArrowDownLeft className="icon deposit-icon" />
-                                    ) : (
-                                        <MdArrowOutward className="icon withdraw-icon" />
-                                    )}</div>
-                                </td>
-                                <td>
-                                    <div>{acc.balanceAfterTransaction}</div>
-
-                                </td>
-                                <td>{formatDate(acc.date)}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className="main-container">
-                <div className="chart-container">
-                    <ResponsiveContainer width="100%" height={500}>
-                        <PieChart>
-                            <Pie
-                                data={pieChartData}
-                                dataKey="value"
-                                nameKey="name"
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={120}
-                                label
-                            >
-                                {pieChartData.map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={entry.name === "Deposits" ? "#A04747" : "#D8A25E"}
-                                    />
+                {transactions.length > 0 ? (
+                    <>
+                        <div className="all-transaction">
+                            <p>Account Type: {userDetails[0]?.accountType}</p>
+                            <button onClick={checkAllTransaction}>All Transactions</button>
+                        </div>
+                        <table className="transaction-table">
+                            <thead>
+                                <tr className="table-header">
+                                    <th>Sr.No</th>
+                                    <th>Account Number</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Balance</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {transactions
+                                .sort((a, b) => new Date(b.date) - new Date(a.date)) 
+                                .slice(0, 3) 
+                                .map((acc, index) => (
+                                    <tr key={acc._id} className="table-row">
+                                        <td>{index + 1}</td>
+                                        <td>{acc.accountId}</td>
+                                        <td>{acc.type}</td>
+                                        <td className='type'>
+                                            <div>{acc.amount}</div>
+                                            <div className='icon'>
+                                                {acc.type.toLowerCase() === "deposit" ? (
+                                                    <FiArrowDownLeft className="icon deposit-icon" />
+                                                ) : (
+                                                    <MdArrowOutward className="icon withdraw-icon" />
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td>{acc.balanceAfterTransaction}</td>
+                                        <td>{formatDate(acc.date)}</td>
+                                    </tr>
                                 ))}
-                            </Pie>
-                            <Tooltip />
-                            <Legend
-                                layout="vertical"
-                                align="right"
-                                verticalAlign="middle"
-                            />
-
-                        </PieChart>
-                    </ResponsiveContainer>
-                </div>
-
-                <div className="chart-container">
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="amount" fill="#A2678A" />
-                            <Bar dataKey="balance" fill="#4D3C77" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+                            </tbody>
+                        </table>
+                        <div className="main-container">
+                            <div className="chart-container">
+                                <ResponsiveContainer width="100%" height={500}>
+                                    <PieChart>
+                                        <Pie
+                                            data={pieChartData}
+                                            dataKey="value"
+                                            nameKey="name"
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={120}
+                                            label
+                                        >
+                                            {pieChartData.map((entry, index) => (
+                                                <Cell
+                                                    key={`cell-${index}`}
+                                                    fill={entry.name === "Deposits" ? "#A04747" : "#D8A25E"}
+                                                />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend layout="vertical" align="right" verticalAlign="middle" />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="chart-container">
+                                <ResponsiveContainer width="100%" height={300}>
+                                    <BarChart data={chartData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="date" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="amount" fill="#A2678A" />
+                                        <Bar dataKey="balance" fill="#4D3C77" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                            <div className="no-data-container">
+                                <img src={noDataFoundGif} alt="No Data Found" className="no-data-gif" />
+                                <button className="login-button" onClick={() => navigate('/login')}>
+                                    Go to Login
+                                </button>
+                            </div>
+                )}
             </div>
             {cardDetails.cardNumber && (
                 <PaymentCard
@@ -237,6 +252,104 @@ const Dashboard = () => {
             )}
         </div>
     );
+    // return (
+    //     <div style={{ width: "100%", height: "400px" }}>
+    //         <h2 className="firstname">Hey {userDetails[0]?.firstName}, Welcome back to Online Banking</h2>
+    //         <p className="last-seen">Last seen: {lastSeen}</p>
+    //         <div>
+    //             <div className="all-transaction">
+    //             <p>Account Type: {userDetails[0]?.accountType}</p>
+    //             <button onClick={checkAllTransaction}>All Transaction</button>
+    //             </div>
+    //             <table className="transaction-table">
+    //                 <thead>
+    //                     <tr className="table-header">
+    //                         <th>Sr.No</th>
+    //                         <th>Account Number</th>
+    //                         <th>Type</th>
+    //                         <th>Amount</th>
+    //                         <th>Balance</th>
+    //                         <th>Date</th>
+    //                     </tr>
+    //                 </thead>
+    //                 <tbody>
+    //                     {transactions.slice(-3).map((acc, index) => (
+    //                         <tr key={acc._id} className="table-row">
+    //                             <td>{index + 1}</td>
+    //                             <td>{acc.accountId}</td>
+    //                             <td>{acc.type}</td>
+    //                             <td className='type'>
+    //                                 <div>{acc.amount}</div>
+    //                                 <div className='icon'> {acc.type.toLowerCase() === "deposit" ? (
+    //                                     <FiArrowDownLeft className="icon deposit-icon" />
+    //                                 ) : (
+    //                                     <MdArrowOutward className="icon withdraw-icon" />
+    //                                 )}</div>
+    //                             </td>
+    //                             <td>
+    //                                 <div>{acc.balanceAfterTransaction}</div>
+
+    //                             </td>
+    //                             <td>{formatDate(acc.date)}</td>
+    //                         </tr>
+    //                     ))}
+    //                 </tbody>
+    //             </table>
+    //         </div>
+    //         <div className="main-container">
+    //             <div className="chart-container">
+    //                 <ResponsiveContainer width="100%" height={500}>
+    //                     <PieChart>
+    //                         <Pie
+    //                             data={pieChartData}
+    //                             dataKey="value"
+    //                             nameKey="name"
+    //                             cx="50%"
+    //                             cy="50%"
+    //                             outerRadius={120}
+    //                             label
+    //                         >
+    //                             {pieChartData.map((entry, index) => (
+    //                                 <Cell
+    //                                     key={`cell-${index}`}
+    //                                     fill={entry.name === "Deposits" ? "#A04747" : "#D8A25E"}
+    //                                 />
+    //                             ))}
+    //                         </Pie>
+    //                         <Tooltip />
+    //                         <Legend
+    //                             layout="vertical"
+    //                             align="right"
+    //                             verticalAlign="middle"
+    //                         />
+
+    //                     </PieChart>
+    //                 </ResponsiveContainer>
+    //             </div>
+
+    //             <div className="chart-container">
+    //                 <ResponsiveContainer width="100%" height={300}>
+    //                     <BarChart data={chartData}>
+    //                         <CartesianGrid strokeDasharray="3 3" />
+    //                         <XAxis dataKey="date" />
+    //                         <YAxis />
+    //                         <Tooltip />
+    //                         <Legend />
+    //                         <Bar dataKey="amount" fill="#A2678A" />
+    //                         <Bar dataKey="balance" fill="#4D3C77" />
+    //                     </BarChart>
+    //                 </ResponsiveContainer>
+    //             </div>
+    //         </div>
+    //         {cardDetails.cardNumber && (
+    //             <PaymentCard
+    //                 cardDetails={cardDetails}
+    //                 flipped={false}
+    //                 cardBgColor="sea"
+    //             />
+    //         )}
+    //     </div>
+    // );
 };
 
 export default Dashboard;

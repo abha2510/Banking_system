@@ -61,7 +61,7 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink
-              to="/payment"
+              to="/loan"
               className={({ isActive }) => (isActive ? "active-link" : undefined)}
               onClick={() => setIsSidebarOpen(false)}
             >

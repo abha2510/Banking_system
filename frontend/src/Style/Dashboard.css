@@ -40,6 +40,33 @@
 }
 .all-transaction button{
     width: 15%;
+    color: #fff;
+    background: rgb(75,117,221);
+    background: linear-gradient(90deg, rgba(75,117,221,1) 27%, rgba(24,22,142,1) 85%);
+    border: none;
+    border-radius: 10px;
+    font-weight: bolder;
+}
+.no-data-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.no-data-gif {
+    margin-bottom: 20px;
+}
+.no-data-container button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.login-button:hover {
+    background-color: #45a049;
 }
 @media screen and (max-width: 768px) and (min-width: 320px) {
     .main-container {

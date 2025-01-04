@@ -111,7 +111,7 @@ const Register = ({ switchToLogin }) => {
                     </div>
                 </div>
                 <p>Already have an account? <a href="#" onClick={switchToLogin}>Login</a></p>
-                <button type="submit">Submit</button>
+                <button className='submit-button' type="submit">Submit</button>
             </form>
             <ToastContainer />
         </div>

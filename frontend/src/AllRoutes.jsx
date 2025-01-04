@@ -8,6 +8,7 @@ import Dashboard from './Components/Dashboard'
 import ToggleForm from './Components/ToggleForm'
 import Withdrawal from './Components/Withdrawal'
 import Deposit from './Components/Deposit'
+import LoanRequest from './Components/LoanRequest'
 
 const AllRoutes = () => {
 
@@ -23,6 +24,7 @@ const AllRoutes = () => {
         <Route path="/logout" element={<Logout/>}></Route>
         <Route path="/withdrawal" element={<Withdrawal/>}></Route>
         <Route path="/deposit" element={<Deposit/>}></Route>
+        <Route path="/loan" element={<LoanRequest/>}></Route>
      </Routes>
 
     </div>
