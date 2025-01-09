@@ -67,5 +67,13 @@ userRouter.post("/login", async (req, res) => {
     }
 })
 
+userRouter.post("/logout", (req, res) => {
+    try {
+        res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+        res.status(500).json({ message: "Logout failed", error: error.message });
+    }
+});
+
 
 module.exports = { userRouter }

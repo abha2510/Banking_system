@@ -10,13 +10,14 @@ transactionRouter.post("/deposite", async (req, res) => {
     if (!account) {
       return res.status(404).json({ message: "Account not found" });
     }
-    account.balance = (account.balance || 0) + amount
+    const depositAmount = Number(amount);
+    account.balance = (account.balance || 0) + depositAmount;
     await account.save();
 
     const transaction = new TransactionModel({
       userId,
       accountId,
-      amount,
+      amount: depositAmount,
       description,
       type: 'Deposit',
       balanceAfterTransaction: account.balance,
