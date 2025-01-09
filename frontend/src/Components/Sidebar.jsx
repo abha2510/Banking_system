@@ -7,6 +7,7 @@ import { IoSettings, IoLogOut } from "react-icons/io5";
 import { PiHandWithdrawBold } from "react-icons/pi";
 import { PiHandDepositBold } from "react-icons/pi";
 import "../Style/Sidebar.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -82,7 +83,11 @@ const Sidebar = () => {
             <NavLink
               to="/logout"
               className={({ isActive }) => (isActive ? "active-link" : undefined)}
-              onClick={() => setIsSidebarOpen(false)}
+              onClick={() => {
+                localStorage.removeItem("token");
+                setIsSidebarOpen(false); 
+                toast.success("Logged out successfully!"); 
+              }}
             >
               <IoLogOut />
               <span className="side-text">Logout</span>
@@ -90,6 +95,7 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
+       <ToastContainer />
     </>
   );
 };

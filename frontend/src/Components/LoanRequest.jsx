@@ -60,7 +60,7 @@ const LoanRequest = () => {
           id="amount"
           name="amount"
           value={formData.amount}
-          onChange={handleChange}
+          onChange={(e) => setFormData({ ...formData, amount: +e.target.value })}
           required
           min="0"
         />
